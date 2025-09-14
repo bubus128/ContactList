@@ -1,0 +1,7 @@
+﻿services:
+  contactlist.api:
+    image: contactlist.api
+    build:
+      context: .
+      dockerfile: ContactList.API/Dockerfile
+
