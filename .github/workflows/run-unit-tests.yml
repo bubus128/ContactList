@@ -11,7 +11,7 @@ on:
       - develop
 
 jobs:
-  build-and-test:
+  run-unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore ./ContactList.sln
+        run: dotnet restore ./src/ContactList.sln
 
       - name: Build solution
         run: dotnet build ./src/ContactList.sln --configuration Release --no-restore
