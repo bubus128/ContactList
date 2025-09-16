@@ -1,15 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <LangVersion>14</LangVersion>
     </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1"/>
-    </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">
@@ -20,6 +17,12 @@
     <ItemGroup>
       <ProjectReference Include="..\ContactList.Business\ContactList.Business.csproj" />
       <ProjectReference Include="..\ContactList.Data\ContactList.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0-rc.1.25451.107" />
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
     </ItemGroup>
 
 </Project>
