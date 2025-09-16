@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactList.Business", "Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactList.Data", "ContactList.Data\ContactList.Data.csproj", "{FDAC70CD-4A06-44B8-905C-4A3EF4477A4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactList.UnitTest", "test\ContactList.UnitTest\ContactList.UnitTest.csproj", "{A948A2F2-13A2-4396-9CB7-2080307F1124}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{FDAC70CD-4A06-44B8-905C-4A3EF4477A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDAC70CD-4A06-44B8-905C-4A3EF4477A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDAC70CD-4A06-44B8-905C-4A3EF4477A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A948A2F2-13A2-4396-9CB7-2080307F1124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A948A2F2-13A2-4396-9CB7-2080307F1124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A948A2F2-13A2-4396-9CB7-2080307F1124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A948A2F2-13A2-4396-9CB7-2080307F1124}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
