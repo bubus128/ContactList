@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactList.API", "ContactList.API\ContactList.API.csproj", "{9ED30A78-D0E9-41B4-A1A1-520591719753}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactList.Web", "ContactList.Web\ContactList.Web.csproj", "{9ED30A78-D0E9-41B4-A1A1-520591719753}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2DA3804D-1628-4DB3-9A54-77E1A13E65B2}"
 	ProjectSection(SolutionItems) = preProject
