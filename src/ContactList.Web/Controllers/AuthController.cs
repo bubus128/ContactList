@@ -1,20 +1,11 @@
-using ContactList.Data.Entities;
+using ContactList.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
+
+namespace ContactList.Web.Controllers;
 
 [Route("auth")]
-public class AuthController : Controller
+public class AuthController(IAuthService authService) : Controller
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
-
-    public AuthController(UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-    }
-
     [HttpGet("login")]
     public IActionResult Login() => PartialView("Login");
 
@@ -24,19 +15,19 @@ public class AuthController : Controller
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        var result = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
-        if (!result.Succeeded) return Unauthorized();
-        return Ok();
+        var (success, message) = await authService.LoginAsync(dto.Email, dto.Password);
+        if (!success)
+            return BadRequest(new { Message = message });
+        return Ok(new { Message = message });
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        var user = new IdentityUser { UserName = dto.Email, Email = dto.Email };
-        var result = await _userManager.CreateAsync(user, dto.Password);
-        if (!result.Succeeded) return BadRequest(result.Errors);
-        await _signInManager.SignInAsync(user, false);
-        return Ok();
+        var (success, message) = await authService.RegisterAsync(dto.Email, dto.Password);
+        if (!success)
+            return BadRequest(new { Message = message });
+        return Ok(new { Message = message });
     }
 }
 

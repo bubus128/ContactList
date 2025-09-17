@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactList.Data", "Contact
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactList.UnitTest", "test\ContactList.UnitTest\ContactList.UnitTest.csproj", "{A948A2F2-13A2-4396-9CB7-2080307F1124}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3826951A-587F-4672-84C9-BF0ACB67B13E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +37,8 @@ Global
 		{A948A2F2-13A2-4396-9CB7-2080307F1124}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A948A2F2-13A2-4396-9CB7-2080307F1124}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A948A2F2-13A2-4396-9CB7-2080307F1124}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A948A2F2-13A2-4396-9CB7-2080307F1124} = {3826951A-587F-4672-84C9-BF0ACB67B13E}
 	EndGlobalSection
 EndGlobal

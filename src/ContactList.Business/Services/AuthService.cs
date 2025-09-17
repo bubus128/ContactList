@@ -1,71 +1,59 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using ContactList.Business.DTOs;
 using ContactList.Business.Services.Interfaces;
-using ContactList.Data.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+using Microsoft.Extensions.Logging;
 
 namespace ContactList.Business.Services;
 
-public class AuthService(UserManager<IdentityUser> userManager, IConfiguration config) : IAuthService
+public class AuthService(
+    UserManager<IdentityUser> userManager,
+    SignInManager<IdentityUser> signInManager,
+    ILogger<AuthService> logger)
+    : IAuthService
 {
-    public async Task<IdentityResult> RegisterAsync(RegisterDto dto)
+    public async Task<(bool Success, string Message)> RegisterAsync(string email, string password)
     {
-        var user = new IdentityUser
+        try
         {
-            UserName = dto.Email,
-            Email = dto.Email,
-        };
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                return (false, "Email and password are required");
 
-        var result = await userManager.CreateAsync(user, dto.Password);
-        return result;
+            var user = new IdentityUser { UserName = email, Email = email };
+            var result = await userManager.CreateAsync(user, password);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+                return (false, errors);
+            }
+
+            await signInManager.SignInAsync(user, isPersistent: false);
+            return (true, "Registration successful");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error during registration");
+            return (false, "Unexpected error during registration");
+        }
     }
 
-    public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
+    public async Task<(bool Success, string Message)> LoginAsync(string email, string password)
     {
-        var user = await userManager.FindByEmailAsync(dto.Email);
-        if (user == null) return null;
-
-        var valid = await userManager.CheckPasswordAsync(user, dto.Password);
-        if (!valid) return null;
-
-        var token = CreateToken(user, out DateTime expires);
-        return new AuthResponseDto(token, expires, user.Email!);
-    }
-
-    private string CreateToken(IdentityUser user, out DateTime expires)
-    {
-        var jwtSection = config.GetSection("Jwt");
-        var key = jwtSection["Key"] ?? throw new InvalidOperationException("JWT key not configured");
-        var issuer = jwtSection["Issuer"];
-        var audience = jwtSection["Audience"];
-        var expiresMinutes = int.Parse(jwtSection["ExpiresMinutes"] ?? "60");
-
-        var claims = new List<Claim>
+        try
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
-            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                return (false, "Email and password are required");
 
-        var keyBytes = Encoding.UTF8.GetBytes(key);
-        var securityKey = new SymmetricSecurityKey(keyBytes);
-        var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        expires = DateTime.UtcNow.AddMinutes(expiresMinutes);
+            var result = await signInManager.PasswordSignInAsync(email, password, false, false);
 
-        var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
-            claims: claims,
-            expires: expires,
-            signingCredentials: creds
-        );
+            if (!result.Succeeded)
+                return (false, "Invalid email or password");
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+            return (true, "Login successful");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error during login");
+            return (false, "Unexpected error during login");
+        }
     }
 }
