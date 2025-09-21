@@ -1,0 +1,16 @@
+@model ContactList.Web.ViewModels.ContactDetailViewModel
+
+<div id="contact-detail" data-id="@Model.Id">
+    <h2>@Model.FirstName @Model.LastName</h2>
+    <p><b>First name:</b> @(Model.FirstName ?? "-")</p>
+    <p><b>Last name:</b> @(Model.LastName ?? "-")</p>
+    <p><b>Date of birth:</b> @(Model.DateOfBirth)</p>
+    <p><b>Email:</b> @(Model.Email ?? "-")</p>
+    <p><b>Phone:</b> @(Model.Phone ?? "-")</p>
+    <p><b>Password:</b> @(Model.Password ?? "-")</p>
+    <p><b>Category:</b> @Model.CategoryName</p>
+
+    <button id="edit-btn">Edit</button>
+    <button id="delete-btn">Delete</button>
+    <button id="back-btn">Back</button>
+</div>

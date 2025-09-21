@@ -6,5 +6,6 @@ public interface IAuthService
 
     public Task<(bool Success, string Message)> LoginAsync(string email, string password);
     
+    public Task LogoutAsync();
     
 }

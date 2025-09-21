@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContactList.Web.Controllers;
 
-[Route("auth")]
+[Route("[controller]")]
 public class AuthController(IAuthService authService) : Controller
 {
     [HttpGet("login")]
@@ -28,6 +28,19 @@ public class AuthController(IAuthService authService) : Controller
         if (!success)
             return BadRequest(new { Message = message });
         return Ok(new { Message = message });
+    }
+    
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await authService.LogoutAsync();
+        return RedirectToAction("Index", "Home");
+    }
+    
+    [HttpGet("is-logged-in")]
+    public IActionResult IsLoggedIn()
+    {
+        return Ok(new { isLoggedIn = User.Identity?.IsAuthenticated ?? false });
     }
 }
 

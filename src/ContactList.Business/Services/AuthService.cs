@@ -56,4 +56,9 @@ public class AuthService(
             return (false, "Unexpected error during login");
         }
     }
+
+    public async Task LogoutAsync()
+    {
+        await signInManager.SignOutAsync();
+    }
 }

@@ -1,0 +1,30 @@
+@model ContactList.Web.ViewModels.ContactEditViewModel
+
+<form asp-controller="Contact"
+    method="post"
+    data-contact-form
+    data-id="@Model.Id"
+    data-action="@(Model.Id == Guid.Empty ? "Create" : "Edit")">
+    
+    <input type="text" name="FirstName" value="@Model.FirstName" placeholder="First Name"/>
+    <input type="text" name="LastName" value="@Model.LastName" placeholder="Last Name"/>
+    <input type="email" name="Email" value="@Model.Email" placeholder="Email"/>
+    <input type="tel" name="Phone" value="@Model.Phone" placeholder="Phone"/>
+    <input type="date" name="BirthDay" value="@Model.Birthday"/>
+    <input type="password" name="Password" value="@Model.Password" placeholder="Password"/>
+    
+    <select name="CategoryId" aria-label="Category">
+        @foreach (var cat in Model.Categories)
+        {
+            <option value="@cat.Id" @(cat.Id == Model.SelectedCategoryId ? "selected" : "")>
+                @cat.Name
+            </option>
+        }
+        <option value="@Guid.Empty">Other</option>
+    </select>
+
+    <input type="text" name="CategoryName" placeholder="Enter new category" disabled/>
+
+    <button type="submit">Save</button>
+</form>
+
