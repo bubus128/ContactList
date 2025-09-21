@@ -1,14 +1,39 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const homeBtn = document.getElementById("home-btn");
-    if (homeBtn) {
-        homeBtn.addEventListener("click", async () => {
+    document.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("home-btn")) {
+            e.preventDefault();
             await loadContacts();
-        });
-    }
+        }
+
+        if (e.target.classList.contains("go-login")) {
+            e.preventDefault();
+            await loadLogin();
+        }
+
+        if (e.target.classList.contains("logout-btn")) {
+            e.preventDefault();
+            await logOut();
+        }
+    });
 
     await loadContacts();
 });
 
+async function logOut(){
+    const resp = await fetch("/auth/logout", {
+        method: "POST",
+        headers: {
+            "RequestVerificationToken": document.querySelector("input[name=__RequestVerificationToken]")?.value ?? ""
+        }
+    });
+
+    if (resp.ok) {
+        await refreshNav();
+        await loadContacts();
+    } else {
+        console.error("Logout failed");
+    }
+} 
 
 async function loadPartial(url) {
     const resp = await fetch(url);
@@ -21,7 +46,7 @@ async function loadPartial(url) {
 // Load contact list view
 async function loadContacts() {
     try {
-        document.getElementById("app-content").innerHTML = await loadPartial("/contact/list-view");
+        document.getElementById("app-content").innerHTML = await loadPartial("/view/contact/list");
         bindContactListEvents();
     } catch (err) {
         console.error(err);
@@ -33,7 +58,7 @@ function bindContactListEvents() {
     const newBtn = document.getElementById("new-btn");
     if (newBtn) {
         newBtn.addEventListener("click", async () => {
-            const res = await fetch("/contact/create-view");
+            const res = await fetch("/view/contact/create");
             document.getElementById("app-content").innerHTML = await res.text();
             bindContactFormEvents();
         });
@@ -57,7 +82,7 @@ function bindContactListEvents() {
     if (categoryFilter) {
         categoryFilter.addEventListener("change", async (e) => {
             const selected = e.target.value;
-            const url = selected ? `/contact/list-view?categoryId=${selected}` : "/contact/list-view";
+            const url = selected ? `/view/contact/list?categoryId=${selected}` : "/view/contact/list";
             try {
                 document.getElementById("app-content").innerHTML = await loadPartial(url);
                 bindContactListEvents();
@@ -71,7 +96,7 @@ function bindContactListEvents() {
 // Load detail view
 async function loadContactDetail(id) {
     try {
-        document.getElementById("app-content").innerHTML = await loadPartial(`/contact/detail-view/${id}`);
+        document.getElementById("app-content").innerHTML = await loadPartial(`/view/contact/detail/${id}`);
         
         const deleteBtn = document.getElementById("delete-btn");
         const editBtn = document.getElementById("edit-btn");
@@ -85,7 +110,7 @@ async function loadContactDetail(id) {
         if (editBtn) {
             editBtn.addEventListener("click", async () => {
                 const id = contactDetail.dataset.id;
-                const res = await fetch(`/contact/edit-view/${id}`);
+                const res = await fetch(`/view/contact/edit/${id}`);
                 document.getElementById("app-content").innerHTML = await res.text();
                 bindContactFormEvents();
             });
@@ -108,7 +133,7 @@ async function loadContactDetail(id) {
 // Load login form partial
 async function loadLogin() {
     try {
-        document.getElementById("app-content").innerHTML = await loadPartial("/auth/login");
+        document.getElementById("app-content").innerHTML = await loadPartial("/view/auth/login");
         bindLoginEvents();
     } catch (err) {
         console.error(err);
@@ -129,6 +154,7 @@ function bindLoginEvents() {
         });
 
         if (resp.ok) {
+            await refreshNav();
             await loadContacts();
         } else {
             const errJson = await resp.json();
@@ -144,7 +170,7 @@ function bindLoginEvents() {
 // Load register form partial
 async function loadRegister() {
     try {
-        document.getElementById("app-content").innerHTML = await loadPartial("/auth/register");
+        document.getElementById("app-content").innerHTML = await loadPartial("/view/auth/register");
         bindRegisterEvents();
     } catch (err) {
         console.error(err);
@@ -178,10 +204,6 @@ function bindRegisterEvents() {
             displayAuthError(errJson.message || "Register failed");
         }
     });
-
-    document.getElementById("go-login")?.addEventListener("click", () => {
-        loadLogin();
-    });
 }
 
 function bindContactFormEvents() {
@@ -204,10 +226,9 @@ function bindContactFormEvents() {
 
         const formData = new FormData(form);
         const json = Object.fromEntries(formData.entries());
-
-        const method = form.dataset.method; // "create" or "edit"
+        
         let url = "/contact/create";
-        if (method === "edit") {
+        if (form.dataset.action === "Edit") {
             const id = form.dataset.id;
             url = `/contact/edit/${id}`;
         }
@@ -254,4 +275,13 @@ async function checkLoginStatus() {
     const res = await fetch('/auth/is-logged-in');
     const data = await res.json();
     return data.isLoggedIn;
+}
+
+async function refreshNav() {
+    try {
+        const nav = await loadPartial("/view/nav");
+        document.getElementById("nav").innerHTML = nav;
+    } catch (err) {
+        console.error("Failed to refresh nav", err);
+    }
 }

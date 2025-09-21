@@ -13,24 +13,9 @@
 </head>
 <body>
 <header>
-    <nav class="navbar">
-        <div class="nav-left">
-            <button id="home-btn">Home</button>
-        </div>
-        <div class="nav-right">
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <span>Hello, @UserManager.GetUserName(User)!</span>
-                <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline;">
-                    <button type="submit">Log out</button>
-                </form>
-            }
-            else
-            {
-                <a asp-controller="Auth" asp-action="Login" class="btn">Log in</a>
-            }
-        </div>
-    </nav>
+    <div class="nav" id="nav">
+        @await Html.PartialAsync("_Nav")
+    </div>
 </header>
 
 <main class="container">

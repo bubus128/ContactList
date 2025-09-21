@@ -1,0 +1,20 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<nav class="navbar">
+    <div class="nav-left">
+        <button class="home-btn">Home</button>
+    </div>
+    <div class="nav-right">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <span>Hello, @UserManager.GetUserName(User)!</span>
+            <button class="logout-btn">Log out</button>
+        }
+        else
+        {
+            <button class="go-login">Log in</button>
+        }
+    </div>
+</nav>

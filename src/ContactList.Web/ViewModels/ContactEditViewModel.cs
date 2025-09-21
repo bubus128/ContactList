@@ -12,9 +12,7 @@ public class ContactEditViewModel
     public string? Phone { get; set; }
     public string? Password { get; set; }
     public DateTime? Birthday { get; set; }
-
     public Guid SelectedCategoryId { get; set; }
     public string? OtherCategoryName { get; set; }
-
     public List<Category> Categories { get; set; } = new();
 }

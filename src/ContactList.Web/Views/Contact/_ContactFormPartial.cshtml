@@ -1,14 +1,10 @@
 @model ContactList.Web.ViewModels.ContactEditViewModel
 
-<form asp-action="@(Model.Id == Guid.Empty ? "Create" : "Edit")"
-      asp-controller="Contact"
-      method="post"
-      data-contact-form>
-    
-    @if (Model.Id != Guid.Empty)
-    {
-        <input type="hidden" name="Id"/>
-    }
+<form asp-controller="Contact"
+    method="post"
+    data-contact-form
+    data-id="@Model.Id"
+    data-action="@(Model.Id == Guid.Empty ? "Create" : "Edit")">
     
     <input type="text" name="FirstName" value="@Model.FirstName" placeholder="First Name"/>
     <input type="text" name="LastName" value="@Model.LastName" placeholder="Last Name"/>

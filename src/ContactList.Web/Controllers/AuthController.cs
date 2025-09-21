@@ -31,7 +31,6 @@ public class AuthController(IAuthService authService) : Controller
     }
     
     [HttpPost("logout")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await authService.LogoutAsync();

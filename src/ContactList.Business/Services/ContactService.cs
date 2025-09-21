@@ -15,10 +15,9 @@ public class ContactService(IContactRepository contactRepository, ICategoryRepos
         return mapper.Map<IEnumerable<SimplyContactDto>>(contacts);
     }
 
-    public async Task<ContactDetailDto?> GetContactByIdAsync(Guid id, CancellationToken ct = default)
+    public async Task<Contact?> GetContactByIdAsync(Guid id, CancellationToken ct = default)
     {
-        var contact = await contactRepository.GetByIdAsync(id, ct);
-        return mapper.Map<ContactDetailDto?>(contact);
+        return await contactRepository.GetByIdAsync(id, ct);
     }
 
     public async Task<List<Category>> GetCategoriesAsync(CancellationToken ct = default)
@@ -38,7 +37,7 @@ public class ContactService(IContactRepository contactRepository, ICategoryRepos
 
     public async Task<Category?> GetCategoryByIdAsync(Guid categoryId, CancellationToken ct)
     {
-        return await categoryRepository.GetByIdAsync(categoryId, ct);;
+        return await categoryRepository.GetByIdAsync(categoryId, ct);
     }
 
     public async Task AddCategoryAsync(Category category, CancellationToken ct)
@@ -53,7 +52,7 @@ public class ContactService(IContactRepository contactRepository, ICategoryRepos
             var newCategory = new Category
             {
                 Id = Guid.NewGuid(),
-                Name = contactRequest.CategoryName
+                Name = contactRequest.CategoryName!
             };
             await AddCategoryAsync(newCategory, ct);
                 

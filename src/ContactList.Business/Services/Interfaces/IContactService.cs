@@ -7,7 +7,7 @@ namespace ContactList.Business.Services.Interfaces;
 public interface IContactService
 {
     Task<IEnumerable<SimplyContactDto>> GetContactsAsync(Guid? categoryId, CancellationToken ct = default);
-    Task<ContactDetailDto?> GetContactByIdAsync(Guid id, CancellationToken ct = default);
+    Task<Contact?> GetContactByIdAsync(Guid id, CancellationToken ct = default);
     Task<List<Category>>  GetCategoriesAsync(CancellationToken ct = default);
     Task DeleteContactAsync(Guid id, CancellationToken ct);
     Task UpdateContactAsync(CreateContactRequest contactRequest, CancellationToken ct);

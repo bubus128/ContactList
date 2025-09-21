@@ -10,7 +10,6 @@ public class BusinessContactProfile : Profile
     public BusinessContactProfile()
     {
         CreateMap<Contact, SimplyContactDto>();
-        CreateMap<Contact, ContactDetailDto>();
         CreateMap<CreateContactRequest, Contact>();
     }
 }
