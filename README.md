@@ -1,7 +1,5 @@
 [![LinkedIn][linkedin-badge]][linkedin-url]
 
-![Last test status](https://img.shields.io/github/actions/workflow/status/bubus128/IssueManager/run_unit_tests.yml)
-
 # ContactList
 ContactList is an ASP.NET 10 MVC web application structured with a 3-tier architecture. It provides basic CRUD operations for managing contacts, using Entity Framework and PostgreSQL as the persistence layer. Automapper is used to map between domain/data models and view models.
 
