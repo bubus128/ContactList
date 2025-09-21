@@ -1,0 +1,31 @@
+@model ContactList.Web.ViewModels.ContactListViewModel
+
+<h2>Contacts</h2>
+
+<div class="filter-bar">
+    <label for="categoryFilter">Category:</label>
+    <select id="categoryFilter">
+        <option value="">All</option>
+        @foreach (var cat in Model.Categories)
+        {
+            <option value="@cat.Id" @(Model.SelectedCategoryId == cat.Id ? "selected" : "")>
+                @cat.Name
+            </option>
+        }
+    </select>
+</div>
+
+<button id="new-btn">Add new contact</button>
+
+<ul class="contact-list">
+    @foreach (var c in Model.Contacts)
+    {
+        <li>
+            @c.FirstName @c.LastName
+            <button class="details-btn" data-id="@c.Id"
+                    @(Model.IsLoggedIn ? "" : "disabled")>
+                Details
+            </button>
+        </li>
+    }
+</ul>

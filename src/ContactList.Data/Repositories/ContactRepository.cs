@@ -1,26 +1,48 @@
+using ContactList.Data.DbContexts;
 using ContactList.Data.Entities;
+using ContactList.Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContactList.Data.Repositories;
 
-public class ContactRepository : IContactRepository
+public class ContactRepository(AppDbContext context) : IContactRepository
 {
-    public async Task<IEnumerable<Contact>> GetAllAsync(CancellationToken ct = default)
+    public async Task<IEnumerable<Contact>> GetByCategoryIdAsync(Guid? categoryId, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        return await context.Contacts
+            .Include(c => c.Category)
+            .Where(c =>  
+                    categoryId == null ||
+                    c.Category.Id == categoryId || 
+                    (c.Subcategory != null && c.Subcategory.Id == categoryId)
+                )
+            .ToListAsync(ct);
     }
 
     public async Task<Contact?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        return await context.Contacts
+            .Include(c => c.Category)
+            .FirstOrDefaultAsync(c => c.Id == id, ct);
     }
 
     public async Task AddAsync(Contact contact, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        context.Contacts.Add(contact);
+        await context.SaveChangesAsync(ct);
+    }
+    
+    public async Task DeleteAsync(Guid id, CancellationToken ct)
+    {
+        await context.Contacts
+            .Where(c => c.Id == id)
+            .ExecuteDeleteAsync(cancellationToken: ct);
+        await context.SaveChangesAsync(ct);
     }
 
-    public async Task SaveChangesAsync(CancellationToken ct = default)
+    public async Task UpdateAsync(Contact contact, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        context.Contacts.Update(contact);
+        await context.SaveChangesAsync(ct);
     }
 }

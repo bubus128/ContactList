@@ -1,17 +1,40 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 <!DOCTYPE html>
-<script src="~/js/app.js"></script>
-<html>
+<html lang="en">
 <head>
-    <title>ContactList SPA</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - ContactList</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/js/app.js" defer></script>
 </head>
 <body>
-<div id="app">
+<header>
+    <nav class="navbar">
+        <div class="nav-left">
+            <button id="home-btn">Home</button>
+        </div>
+        <div class="nav-right">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <span>Hello, @UserManager.GetUserName(User)!</span>
+                <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline;">
+                    <button type="submit">Log out</button>
+                </form>
+            }
+            else
+            {
+                <a asp-controller="Auth" asp-action="Login" class="btn">Log in</a>
+            }
+        </div>
+    </nav>
+</header>
+
+<main class="container">
     @RenderBody()
-
-    <div id="content"></div>
-</div>
-
-<script src="/js/app.js"></script>
+</main>
 </body>
 </html>
